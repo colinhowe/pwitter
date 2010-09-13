@@ -2844,6 +2844,22 @@ class Api(object):
 
     return 0
 
+  def friendship_exists(self, follower, followee):
+    '''Check if a friendship exists between the follower and followee.
+    
+    Returns:
+      True if and only if follower follows followee.
+    '''
+    url  = '%s/friendships/exists.json?user_a=%s&user_b=%s' %  \
+        (self.base_url, follower, followee)
+    json = self._FetchUrl(url)
+    data = simplejson.loads(json)
+
+    if data != False and data != True:
+        self._CheckForTwitterError(data)
+
+    return data
+  
   def _BuildUrl(self, url, path_elements=None, extra_params=None):
     # Break url into consituent parts
     (scheme, netloc, path, params, query, fragment) = urlparse.urlparse(url)

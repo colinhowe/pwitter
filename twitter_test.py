@@ -25,6 +25,7 @@ import time
 import calendar
 import unittest
 import urllib
+from StringIO import StringIO
 
 import twitter
 
@@ -466,6 +467,13 @@ class ApiTest(unittest.TestCase):
     self.assertEqual('dewitt', user.screen_name)
     self.assertEqual(89586072, user.status.id)
 
+  def test_friendship_exists(self):
+    '''Test the twitter.Api friendship_exists method'''
+    self._AddHandler('https://api.twitter.com/1/friendships/exists.json?user_b=456&user_a=123',
+                     lambda: self._FakeResponse("true"))
+    friendship_exists = self._api.friendship_exists(follower=123, followee=456)
+    self.assertTrue(friendship_exists)
+
   def _AddHandler(self, url, callback):
     self._urllib.AddHandler(url, callback)
 
@@ -479,6 +487,9 @@ class ApiTest(unittest.TestCase):
     # make sure that the returned object contains an .info() method:
     # headers are set to {}
     return urllib.addinfo(f, {})
+
+  def _FakeResponse(self, response):
+    return urllib.addinfo(StringIO(response), {})
 
 class MockUrllib(object):
   '''A mock replacement for urllib that hardcodes specific responses.'''
