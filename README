@@ -5,6 +5,10 @@ A fork of python-twitter (http://code.google.com/p/python-twitter/).
 Fork Authors: Colin Howe (http://github.com/colinhowe/)
 Original Authors: The Python-Twitter Developers (python-twitter@googlegroups.com)
 
+==Differences to Original==
+
+* Working tests
+
 ==Introduction==
 
 This library provides a pure Python interface for the Twitter API.
