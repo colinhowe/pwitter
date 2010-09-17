@@ -427,6 +427,13 @@ class ApiTest(unittest.TestCase):
     statuses = self._api.GetDirectMessages(page=1)
     self.assertEqual(u'A légpárnás hajóm tele van angolnákkal.', statuses[0].text)
 
+  def testGetSentDirectMessages(self):
+    '''Test the twitter.Api GetDirectMessages method'''
+    self._AddHandler('https://api.twitter.com/1/direct_messages/sent.json?since_id=1',
+                     curry(self._OpenTestData, 'direct_messages-sent.json'))
+    statuses = self._api.GetSentDirectMessages(since_id=1)
+    self.assertEqual(u'A légpárnás hajóm tele van angolnákkal.', statuses[0].text)
+
   def testPostDirectMessage(self):
     '''Test the twitter.Api PostDirectMessage method'''
     self._AddHandler('https://api.twitter.com/1/direct_messages/new.json',
