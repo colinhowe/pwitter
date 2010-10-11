@@ -372,6 +372,15 @@ class ApiTest(unittest.TestCase):
     self.assertEqual(89512102, status.id)
     self.assertEqual(718443, status.user.id)
 
+  def test_get_retweets(self):
+    '''Test the twitter.Api get_retweeted_by_ids method'''
+    self._AddHandler('https://api.twitter.com/1/statuses/retweets/26864517378.json',
+                     curry(self._OpenTestData, 'get_retweets.json'))
+    retweets = self._api.get_retweets(26864517378L)
+    self.assertEqual(1, len(retweets))
+    retweet = retweets[0]
+    self.assertEqual(27040658522, retweet.id)
+
   def testDestroyStatus(self):
     '''Test the twitter.Api DestroyStatus method'''
     self._AddHandler('https://api.twitter.com/1/statuses/destroy/103208352.json',

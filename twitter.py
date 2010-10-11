@@ -2095,6 +2095,28 @@ class Api(object):
     self._CheckForTwitterError(data)
     return Status.NewFromJsonDict(data)
 
+  def get_retweets(self, uid):
+    '''Returns the list of retweets for the given tweet.
+    
+    This will only ever return the 100 most recent retweets.
+
+    The twitter.Api instance must be authenticated to use this method.
+
+    Args:
+      uid: The numerical ID of the status you're trying to retrieve retweets for.
+
+    Returns:
+      A list of twitter.Status instance representing that status message
+    '''
+    if not self._oauth_consumer:
+      raise TwitterError("The twitter.Api instsance must be authenticated.")
+    url = '%s/statuses/retweets/%s.json' % (self.base_url, uid)
+    parameters = {}
+    json = self._FetchUrl(url, parameters=parameters)
+    data = simplejson.loads(json)
+    self._CheckForTwitterError(data)
+    return [Status.NewFromJsonDict(s) for s in data]
+
   def DestroyStatus(self, id):
     '''Destroys the status specified by the required ID parameter.
 
