@@ -1687,6 +1687,7 @@ class Api(object):
   '''
 
   DEFAULT_CACHE_TIMEOUT = 60 # cache for 1 minute
+  DEFAULT_CALL_TIMEOUT = 5 # Only let a call to twitter take 5 seconds at most
   _API_REALM = 'Twitter API'
 
   def __init__(self,
@@ -1699,7 +1700,8 @@ class Api(object):
                cache=DEFAULT_CACHE,
                shortner=None,
                base_url=None,
-               use_gzip_compression=False):
+               use_gzip_compression=False,
+               call_timeout=DEFAULT_CALL_TIMEOUT):
     '''Instantiate a new twitter.Api object.
 
     Args:
@@ -1743,6 +1745,7 @@ class Api(object):
     self._input_encoding = input_encoding
     self._use_gzip       = use_gzip_compression
     self._oauth_consumer = None
+    self._call_timeout   = call_timeout
 
     self._InitializeRequestHeaders(request_headers)
     self._InitializeUserAgent()
@@ -3095,7 +3098,7 @@ class Api(object):
 
     # Open and return the URL immediately if we're not going to cache
     if encoded_post_data or no_cache or not self._cache or not self._cache_timeout:
-      response = opener.open(url, encoded_post_data)
+      response = opener.open(url, encoded_post_data, self._call_timeout)
       url_data = self._DecompressGzippedResponse(response)
       opener.close()
     else:
@@ -3111,7 +3114,7 @@ class Api(object):
       # If the cached version is outdated then fetch another and store it
       if not last_cached or time.time() >= last_cached + self._cache_timeout:
         try:
-          response = opener.open(url, encoded_post_data)
+          response = opener.open(url, encoded_post_data, self._call_timeout)
           url_data = self._DecompressGzippedResponse(response)
         except urllib2.HTTPError, e:
           print e
