@@ -1888,7 +1888,7 @@ class Api(object):
       show_user:
         prefixes screen name in status
       query_users:
-        If set to False, then all users only have screen_name, id and
+        If set to False, then all users only have screen_name and
         profile_image_url available.
         If set to True, all information of users are available,
         but it uses lots of request quota, one per status.
@@ -1930,8 +1930,7 @@ class Api(object):
         # Build user object with new request
         temp.user = self.GetUser(urllib.quote(x['from_user']))
       else:
-        temp.user = User(screen_name=x['from_user'], id=x['from_user_id'],
-                         profile_image_url=x['profile_image_url'])
+        temp.user = User(screen_name=x['from_user'], profile_image_url=x['profile_image_url'])
 
       results.append(temp)
 
