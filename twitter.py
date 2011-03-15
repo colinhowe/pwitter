@@ -1930,7 +1930,6 @@ class Api(object):
         # Build user object with new request
         temp.user = self.GetUser(urllib.quote(x['from_user']))
       else:
-        temp.user = User(screen_name=x['from_user'], 
         temp.user = User(screen_name=x['from_user'], id=x['from_user_id'],
                          profile_image_url=x['profile_image_url'])
 
