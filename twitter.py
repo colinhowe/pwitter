@@ -1928,7 +1928,10 @@ class Api(object):
 
       if query_users:
         # Build user object with new request
-        temp.user = self.GetUser(urllib.quote(x['from_user']))
+        try:
+            temp.user = self.GetUser(urllib.quote(x['from_user']))
+        except TwitterError, err:
+            continue
       else:
         temp.user = User(screen_name=x['from_user'], profile_image_url=x['profile_image_url'])
 
